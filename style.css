@@ -1,0 +1,90 @@
+*, *::after, *::before{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, sans-serif;
+    font-weight: lighter;
+}
+
+:root{
+    --main-bg-color: #D4D4D2;
+    --cal-bg-color: #1C1C1C;
+    --btn-bg-color: #505050;
+    --operatot-btn-bg-color: #FF9500;
+}
+
+body{
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--main-bg-color);
+}
+
+.screen{
+    width: 330px;
+    font-size: 100px;
+    margin: auto;
+    text-align: end;
+    margin-bottom: 10px;
+    line-height: 85px;
+}
+
+.calc{
+    background-color: var(--cal-bg-color);
+    height: 110vh;
+    width: 100vw;
+    color: white;
+    padding-top: 30px;
+}
+
+.calc-body{
+    width: 330px;
+    margin: auto;
+}
+
+.calc-flex{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.calc-btn{
+    background-color: var(--btn-bg-color);
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.double{
+    width: 160px;
+    border-radius: 50px;
+    justify-content: start;
+    padding: 27px;
+}
+
+.calc-flex .calc-btn:last-child{
+    background-color: var(--operatot-btn-bg-color);
+    padding-bottom: 5px;
+}
+
+.func{
+    background-color: var(--main-bg-color);
+    color: var(--cal-bg-color);
+    font-size: 30px;
+}
+
+@media only screen and (min-width: 426px){
+    .calc{
+        width: 375px;
+        height: 667px;
+        margin: 0 auto;
+        margin-top: 50px;
+        border-radius: 40px;
+        box-shadow: 0 0 15px 5px var(--btn-bg-color);
+    }
+}
