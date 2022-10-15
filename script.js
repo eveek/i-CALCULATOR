@@ -1,6 +1,8 @@
 let buffer = "0";
 let subBuffer = "5+3"
-let currentOperator;
+let previousOperator = ""; 
+let runningTotal = 0;
+let operatorActive = false;
 
 const clearBtn = document.querySelector(".clear");
 
@@ -39,42 +41,58 @@ function handleOperator(operator){
     switch (operator){
         case "÷":
         case "/":
-            console.log("÷")
+            doMath("/");
             break;
         
         case "×":
         case "*":
-            console.log("×")
+            doMath("*");
             break;
         
         case "−":
         case "-":
-            console.log(operator)
+            doMath("-");
             break;
 
         case "+":
-            console.log(operator)
+            doMath("+");
             break;
 
         case "=":
-            console.log(operator)
+        case "Enter":
+            const floatBuffer = parseFloat(buffer);
+            if(buffer == "0")return;
+            if(previousOperator == "")return;
+            handleMath(floatBuffer);
+            buffer = runningTotal;
+            operatorActive = true;
+            previousOperator = "";
             break;
 
         case "C":
         case "c":
         case "AC":
-            symbolClickEffect("AC")
-            buffer = "0"
+            symbolClickEffect("AC");
+            buffer = "0";
+            previousOperator = "";
+            runningTotal = 0;
+            operatorActive = false;
             break;
 
         case "+/-":
         case "n":
         case "N":
-            symbolClickEffect("+/-")
+            symbolClickEffect("+/-");
+            const negaBuffer = `-${buffer}`;
+            buffer = negaBuffer;
             break;
 
         case "%":
-            symbolClickEffect("%")
+            symbolClickEffect("%");
+            const numArray = parseFloat(buffer);
+            const percentage = numArray / 100;
+            if(buffer == "0") return;
+            buffer = percentage;
             break;
 
         default:
@@ -82,14 +100,44 @@ function handleOperator(operator){
     }
 }
 
+function doMath(operator){
+    operatorActive = true;
+    const floatBuffer = parseFloat(buffer);
+    if(buffer == "0" || buffer == "-0")return;
+    if(previousOperator === ""){
+        previousOperator = operator;
+        runningTotal = floatBuffer;
+        return
+    }
+
+    handleMath(floatBuffer);
+    previousOperator = operator;
+}
+
+function handleMath(floatBuffer){
+    if(previousOperator === "+"){
+        runningTotal += floatBuffer;
+    }else if(previousOperator === "/"){
+        runningTotal /= floatBuffer;
+    }else if(previousOperator === "-"){
+        runningTotal -= floatBuffer;
+    }else{
+        runningTotal *= floatBuffer
+    }
+
+}
+
 function handleNumber(number){
     numberClickEffect(number);
+    if(operatorActive) buffer = "";
     if(number === ".") {
         if(buffer === "0") buffer += number;
         if(!containsDot()) return;
     }
     if(buffer === "0") buffer = "";
+    if(buffer === "-0") buffer = "-"
     buffer += number;
+    operatorActive = false;
 }
 
 calcButtons.forEach(calcButton => calcButton.addEventListener("click", e => {
@@ -114,3 +162,5 @@ function buttonClick(button){
 }
 
 
+
+// window.addEventListener("keypress",e => console.log(e))
