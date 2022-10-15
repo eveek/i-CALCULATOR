@@ -20,12 +20,23 @@ body{
 }
 
 .screen{
-    width: 330px;
-    font-size: 100px;
     margin: auto;
     text-align: end;
+    width: 330px;
+}
+
+.main-screen{
+    font-size: 100px;
     margin-bottom: 10px;
     line-height: 85px;
+    width: 100%;
+    height: 85px;
+}
+
+.upper-screen{
+    font-size: 20px;
+    padding: 5px;
+    height: 33px;
 }
 
 .calc{
@@ -58,6 +69,7 @@ body{
     justify-content: center;
     font-size: 40px;
     cursor: pointer;
+    transition: background-color ease-in-out 400ms;
 }
 
 .double{
@@ -78,6 +90,16 @@ body{
     font-size: 30px;
 }
 
+.num-click{
+    background-color: var(--main-bg-color);
+    transition: background-color 0ms;
+}
+
+.symbol-click{
+    background-color: white;
+    transition: background-color 0ms;
+}
+
 @media only screen and (min-width: 426px){
     .calc{
         width: 375px;
@@ -86,5 +108,6 @@ body{
         margin-top: 50px;
         border-radius: 40px;
         box-shadow: 0 0 15px 5px var(--btn-bg-color);
+        box-shadow:inset 0 0 15px 5px var(--btn-bg-color);
     }
 }
