@@ -36,7 +36,6 @@ body{
 
 .upper-screen{
     font-size: 20px;
-    padding: 5px;
     height: 33px;
 }
 
@@ -80,7 +79,7 @@ body{
     padding: 27px;
 }
 
-.calc-flex .calc-btn:last-child{
+.calc-flex .operator{
     background-color: var(--operatot-btn-bg-color);
     padding-bottom: 5px;
 }
@@ -101,15 +100,32 @@ body{
     transition: background-color 0ms;
 }
 
+.calc-flex .operator-click{
+    background-color: white;
+    color: var(--operatot-btn-bg-color);
+}
+
+.clear-one{
+    cursor: pointer;
+    width: fit-content;
+    float: right;
+    padding: 4px;
+    /* display: none; */
+}
+
 @media only screen and (min-width: 426px){
     .calc{
         width: 375px;
         height: 667px;
         margin: 0 auto;
-        margin-top: 50px;
+        /* margin-top: 50px; */
         border-radius: 40px;
         box-shadow: 0 0 20px 5px var(--btn-bg-color),
         inset 0 0 15px 2px var(--inset-shadow);
         
+    }
+
+    body{
+        padding-top: 70px;
     }
 }

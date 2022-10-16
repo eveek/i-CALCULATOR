@@ -1,20 +1,22 @@
 let buffer = "0";
-let subBuffer = "5+3"
 let previousOperator = ""; 
 let runningTotal = 0;
 let operatorActive = false;
 
-const clearBtn = document.querySelector(".clear");
-
-let clearStatus = "AC";
 
 
 const calcButtons = document.querySelectorAll(".calc-btn");
 const screen = document.querySelector(".screen");
 const mainScreen = document.querySelector(".main-screen");
-const upperScreen = document.querySelector(".upper-screen");
+const clearOne = document.querySelector(".clear-one");
 
-upperScreen.innerText = subBuffer;
+const arrayBtns = Array.from(calcButtons);
+const divideBtn = arrayBtns.find(btn => btn.textContent === "÷");
+const addBtn = arrayBtns.find(btn => btn.textContent === "+");
+const minusBtn = arrayBtns.find(btn => btn.textContent === "−");
+const timesBtn = arrayBtns.find(btn => btn.textContent === "×");
+const equalsBtn = arrayBtns.find(btn => btn.textContent === "=");
+
 
 function numberClickEffect(number){
     const arrayBtns = Array.from(calcButtons);
@@ -30,11 +32,74 @@ function symbolClickEffect(symbol){
     setTimeout(()=> {currentBtn.classList.remove("symbol-click"),10})
 }
 
+function operatorClickEffect(operator){
+    if(operator === "/"){
+        divideBtn.classList.add("operator-click");
+        addBtn.classList.remove("operator-click");
+        minusBtn.classList.remove("operator-click");
+        timesBtn.classList.remove("operator-click");
+    }else if(operator === "+"){
+        addBtn.classList.add("operator-click");
+        timesBtn.classList.remove("operator-click");
+        divideBtn.classList.remove("operator-click");
+        minusBtn.classList.remove("operator-click");
+    }else if(operator === "-"){
+        minusBtn.classList.add("operator-click");
+        addBtn.classList.remove("operator-click");
+        timesBtn.classList.remove("operator-click");
+        divideBtn.classList.remove("operator-click");
+    }else if(operator === "="){
+        equalsBtn.classList.add("operator-click");
+        setTimeout(()=> {
+            equalsBtn.classList.remove("operator-click");
+        },300)
+    }else{
+        timesBtn.classList.add("operator-click");
+        minusBtn.classList.remove("operator-click");
+        addBtn.classList.remove("operator-click");
+        divideBtn.classList.remove("operator-click");
+    }
+}
+
+function clearOperatorEffect(){
+    divideBtn.classList.remove("operator-click");
+    addBtn.classList.remove("operator-click");
+    minusBtn.classList.remove("operator-click");
+    timesBtn.classList.remove("operator-click");
+}
+
 function containsDot(){
     const arrayBuffer = Array.from(buffer);
     const checkBuffer = arrayBuffer.some(num => num === ".");
     return (checkBuffer)? false: true;
 }
+
+function toggleNegative(){
+    const stringBuffer = buffer.toString();
+    const firstChr = stringBuffer.charAt(0);
+    const rest = stringBuffer.slice(1)
+    if(firstChr != "-"){
+        const negaBuffer = `-${buffer}`;
+        buffer = negaBuffer;
+    } else{
+        buffer = rest;
+    }
+}
+
+function removeLast(){
+    const stringBuffer = buffer.toString();
+    const removeLast = stringBuffer.slice(0, stringBuffer.length - 1);
+    if(buffer == "0")return;
+    if(buffer.length === 1) {
+        buffer = "0";
+        mainScreen.innerText = buffer;
+        return;
+    }
+    buffer = removeLast;
+    mainScreen.innerText = buffer;
+}
+
+clearOne.addEventListener("click", ()=> removeLast())
 
 
 function handleOperator(operator){
@@ -60,6 +125,7 @@ function handleOperator(operator){
 
         case "=":
         case "Enter":
+            operatorClickEffect("=");
             const floatBuffer = parseFloat(buffer);
             if(buffer == "0")return;
             if(previousOperator == "")return;
@@ -83,8 +149,7 @@ function handleOperator(operator){
         case "n":
         case "N":
             symbolClickEffect("+/-");
-            const negaBuffer = `-${buffer}`;
-            buffer = negaBuffer;
+            toggleNegative()
             break;
 
         case "%":
@@ -104,6 +169,7 @@ function doMath(operator){
     operatorActive = true;
     const floatBuffer = parseFloat(buffer);
     if(buffer == "0" || buffer == "-0")return;
+    operatorClickEffect(operator);
     if(previousOperator === ""){
         previousOperator = operator;
         runningTotal = floatBuffer;
@@ -129,7 +195,9 @@ function handleMath(floatBuffer){
 
 function handleNumber(number){
     numberClickEffect(number);
+    if(buffer.length >= 6)return;
     if(operatorActive) buffer = "";
+    clearOperatorEffect();
     if(number === ".") {
         if(buffer === "0") buffer += number;
         if(!containsDot()) return;
@@ -146,6 +214,7 @@ calcButtons.forEach(calcButton => calcButton.addEventListener("click", e => {
 }));
 window.addEventListener("keypress", e => {
     const keyContent = e.key;
+    if(e.code === "Space")return;
     buttonClick(keyContent);
 })
 
@@ -153,14 +222,17 @@ function buttonClick(button){
     const buttonContent = button;
     if(!isNaN(buttonContent) || buttonContent === "."){
         handleNumber(buttonContent);
-        // clearStatus = "C"
     } else{
         handleOperator(buttonContent);
     }
     mainScreen.innerText = buffer;
-    // clearBtn.textContent = clearStatus;
 }
 
 
 
-// window.addEventListener("keypress",e => console.log(e))
+window.addEventListener("keydown",e => {
+    if(e.key === "Backspace"){
+        removeLast();
+    }
+    // console.log(e)
+})
