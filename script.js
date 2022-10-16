@@ -2,6 +2,7 @@ let buffer = "0";
 let previousOperator = ""; 
 let runningTotal = 0;
 let operatorActive = false;
+let checkOperatorEql = false;
 
 
 
@@ -112,6 +113,7 @@ function runEqualSign(){
     buffer = runningTotal;
     operatorActive = true;
     previousOperator = "";
+    checkOperatorEql = true;
 
     minusBtn.classList.remove("operator-click");
     addBtn.classList.remove("operator-click");
@@ -119,9 +121,15 @@ function runEqualSign(){
     divideBtn.classList.remove("operator-click");
 }
 
-function removeLast(){
+function deleteLastChr(){
     const stringBuffer = buffer.toString();
     const removeLast = stringBuffer.slice(0, stringBuffer.length - 1);
+    if(checkOperatorEql){
+        buffer = "0";
+        mainScreen.innerText = buffer;
+        checkOperatorEql = false;
+        return
+    }
     if(buffer == "0")return;
     if(buffer.length === 1) {
         buffer = "0";
@@ -132,7 +140,7 @@ function removeLast(){
     mainScreen.innerText = buffer;
 }
 
-clearOne.addEventListener("click", ()=> removeLast())
+clearOne.addEventListener("click", ()=> deleteLastChr())
 
 
 function handleOperator(operator){
@@ -255,7 +263,7 @@ function buttonClick(button){
 
 window.addEventListener("keydown",e => {
     if(e.key === "Backspace"){
-        removeLast();
+        deleteLastChr();
     }
     // console.log(e)
 })
