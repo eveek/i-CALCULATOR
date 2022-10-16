@@ -49,6 +49,10 @@ function operatorClickEffect(operator){
         timesBtn.classList.remove("operator-click");
         divideBtn.classList.remove("operator-click");
     }else if(operator === "="){
+        minusBtn.classList.remove("operator-click");
+        addBtn.classList.remove("operator-click");
+        timesBtn.classList.remove("operator-click");
+        divideBtn.classList.remove("operator-click");
         equalsBtn.classList.add("operator-click");
         setTimeout(()=> {
             equalsBtn.classList.remove("operator-click");
@@ -84,6 +88,35 @@ function toggleNegative(){
     } else{
         buffer = rest;
     }
+}
+
+function clearAll(){
+    symbolClickEffect("AC");
+    buffer = "0";
+    previousOperator = "";
+    runningTotal = 0;
+    operatorActive = false;
+
+    minusBtn.classList.remove("operator-click");
+    addBtn.classList.remove("operator-click");
+    timesBtn.classList.remove("operator-click");
+    divideBtn.classList.remove("operator-click");
+}
+
+function runEqualSign(){
+    operatorClickEffect("=");
+    const floatBuffer = parseFloat(buffer);
+    if(buffer == "0")return;
+    if(previousOperator == "")return;
+    handleMath(floatBuffer);
+    buffer = runningTotal;
+    operatorActive = true;
+    previousOperator = "";
+
+    minusBtn.classList.remove("operator-click");
+    addBtn.classList.remove("operator-click");
+    timesBtn.classList.remove("operator-click");
+    divideBtn.classList.remove("operator-click");
 }
 
 function removeLast(){
@@ -125,24 +158,13 @@ function handleOperator(operator){
 
         case "=":
         case "Enter":
-            operatorClickEffect("=");
-            const floatBuffer = parseFloat(buffer);
-            if(buffer == "0")return;
-            if(previousOperator == "")return;
-            handleMath(floatBuffer);
-            buffer = runningTotal;
-            operatorActive = true;
-            previousOperator = "";
+            runEqualSign();
             break;
 
         case "C":
         case "c":
         case "AC":
-            symbolClickEffect("AC");
-            buffer = "0";
-            previousOperator = "";
-            runningTotal = 0;
-            operatorActive = false;
+            clearAll();
             break;
 
         case "+/-":
@@ -214,6 +236,7 @@ calcButtons.forEach(calcButton => calcButton.addEventListener("click", e => {
 }));
 window.addEventListener("keypress", e => {
     const keyContent = e.key;
+    // spaceBar is throwing an error. This "if" statement fixed it.
     if(e.code === "Space")return;
     buttonClick(keyContent);
 })
