@@ -110,15 +110,33 @@ function runEqualSign(){
     if(buffer == "0")return;
     if(previousOperator == "")return;
     handleMath(floatBuffer);
-    buffer = runningTotal;
+    buffer = runningTotal.toString();
     operatorActive = true;
     previousOperator = "";
     checkOperatorEql = true;
-
     minusBtn.classList.remove("operator-click");
     addBtn.classList.remove("operator-click");
     timesBtn.classList.remove("operator-click");
     divideBtn.classList.remove("operator-click");
+}
+
+function updateFontSiseClear(){
+    if(buffer.length == 8){
+        mainScreen.style.fontSize = "65px";
+    }else if(buffer.length === 7){
+        mainScreen.style.fontSize = "75px";
+    }
+}
+
+function updateFontSise(){
+    if(buffer.length == 7){
+        mainScreen.style.fontSize = "75px";
+    }else if(buffer.length == 8){
+        mainScreen.style.fontSize = "65px"
+    }else{
+        mainScreen.style.fontSize = "60px"
+    }
+
 }
 
 function deleteLastChr(){
@@ -137,7 +155,12 @@ function deleteLastChr(){
         return;
     }
     buffer = removeLast;
-    mainScreen.innerText = buffer;
+    if(buffer.length > 6){
+        updateFontSiseClear();
+    }else{
+        mainScreen.style.fontSize = "95px";
+    };
+    mainScreen.innerText = parseFloat(buffer).toLocaleString();
 }
 
 clearOne.addEventListener("click", ()=> deleteLastChr())
@@ -191,7 +214,7 @@ function handleOperator(operator){
             break;
 
         default:
-            return
+            return;
     }
 }
 
@@ -225,8 +248,8 @@ function handleMath(floatBuffer){
 
 function handleNumber(number){
     numberClickEffect(number);
-    if(buffer.length >= 6)return;
     if(operatorActive) buffer = "";
+    if(buffer.length == 9)return;
     clearOperatorEffect();
     if(number === ".") {
         if(buffer === "0") buffer += number;
@@ -256,7 +279,14 @@ function buttonClick(button){
     } else{
         handleOperator(buttonContent);
     }
-    mainScreen.innerText = buffer;
+
+    if(buffer.length > 6){
+        updateFontSise();
+    }else{
+        mainScreen.style.fontSize = "95px";
+    };
+
+    mainScreen.innerText = parseFloat(buffer).toLocaleString();
 }
 
 
@@ -265,5 +295,4 @@ window.addEventListener("keydown",e => {
     if(e.key === "Backspace"){
         deleteLastChr();
     }
-    // console.log(e)
 })
