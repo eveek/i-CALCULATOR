@@ -5,6 +5,23 @@ let operatorActive = false;
 let checkOperatorEql = false;
 
 
+const body = document.querySelector("body")
+const colorModeToggle = document.getElementById("color_mode_toggle");
+const darkMode = document.getElementById("dark");
+const lightMode = document.getElementById("light");
+
+lightMode.addEventListener('click', ()=> {
+    colorModeToggle.style.left = "5px";
+    body.classList.add("light")
+})
+
+darkMode.addEventListener('click', ()=> {
+    colorModeToggle.style.left = "60px";
+    body.classList.remove("light")
+})
+
+
+
 
 const calcButtons = document.querySelectorAll(".calc-btn");
 const screen = document.querySelector(".screen");
@@ -149,9 +166,14 @@ function deleteLastChr(){
         return
     }
     if(buffer == "0")return;
+    if(buffer.length === 2){
+        const stringBuffer = buffer.toString();
+        const firstChr = stringBuffer.charAt(0);
+        if(firstChr == "-") buffer = "0";
+    }
     if(buffer.length === 1) {
         buffer = "0";
-        mainScreen.innerText = buffer;
+        mainScreen.innerText = addCommas(buffer);
         return;
     }
     buffer = removeLast;
@@ -160,7 +182,7 @@ function deleteLastChr(){
     }else{
         mainScreen.style.fontSize = "95px";
     };
-    mainScreen.innerText = parseFloat(buffer).toLocaleString();
+    mainScreen.innerText = addCommas(buffer);
 }
 
 clearOne.addEventListener("click", ()=> deleteLastChr())
@@ -230,6 +252,7 @@ function doMath(operator){
     }
 
     handleMath(floatBuffer);
+    buffer = runningTotal.toString();
     previousOperator = operator;
 }
 
@@ -246,24 +269,30 @@ function handleMath(floatBuffer){
 
 }
 
+function handleCommas(commas){
+    if(!containsDot()) return;
+    buffer += commas;
+    // mainScreen.innerText = buffer;
+}
+
 function handleNumber(number){
     numberClickEffect(number);
     if(operatorActive) buffer = "";
     if(buffer.length == 9)return;
     clearOperatorEffect();
     if(number === ".") {
-        if(buffer === "0") buffer += number;
-        if(!containsDot()) return;
+        handleCommas(number)
+    }else{
+        if(buffer === "0") buffer = "";
+        if(buffer === "-0") buffer = "-"
+        buffer += number;
     }
-    if(buffer === "0") buffer = "";
-    if(buffer === "-0") buffer = "-"
-    buffer += number;
     operatorActive = false;
 }
 
 calcButtons.forEach(calcButton => calcButton.addEventListener("click", e => {
     const buttonText = e.target.textContent;
-    buttonClick(buttonText)
+    buttonClick(buttonText);
 }));
 window.addEventListener("keypress", e => {
     const keyContent = e.key;
@@ -286,10 +315,16 @@ function buttonClick(button){
         mainScreen.style.fontSize = "95px";
     };
 
-    mainScreen.innerText = parseFloat(buffer).toLocaleString();
+    mainScreen.innerText = addCommas(buffer);
 }
 
-
+function addCommas(buffer){
+    const stringBuffer = buffer.toString();
+    const lastChr = stringBuffer.charAt(buffer.length - 1);
+    const parts = buffer.toString().split(".");
+    const newBuffer = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + (lastChr == "." ? lastChr : "") + (parts[1] ? "." + parts[1] : "");
+    return newBuffer;
+}
 
 window.addEventListener("keydown",e => {
     if(e.key === "Backspace"){

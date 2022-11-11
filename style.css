@@ -8,16 +8,68 @@
 
 :root{
     --main-bg-color: #D4D4D2;
+    --func-bg-color: #D4D4D2;
     --cal-bg-color: #1C1C1C;
     --btn-bg-color: #505050;
-    --operatot-btn-bg-color: #FF9500;
-    --inset-shadow: #f4f2f2;
+    --operator-btn-bg-color: #FF9500;
+    --inset-shadow: #ffffff;
+    --func-color: #1C1C1C;
+    --screen-color: white;
+    --box-shadow: #000000b0;
+    --operator-click-bg-color: white;
+    --symb-click-bg-color: white;
+}
+
+body.light{
+    --main-bg-color: rgb(255, 196, 0);
+    --func-bg-color: rgb(255, 196, 0);
+    --cal-bg-color: white;
+    --btn-bg-color: #D4D4D2;
+    --operator-btn-bg-color: #FF9500;
+    --inset-shadow: #5c5454;
+    --box-shadow: #000000b0;
+    --func-color: #1C1C1C;
+    --screen-color: #1C1C1C;
+    --operator-click-bg-color: #eaeaea;
+    --symb-click-bg-color: rgb(212, 163, 3);
 }
 
 body{
     height: 100vh;
     width: 100vw;
     background-color: var(--main-bg-color);
+}
+
+#color-mode{
+    width: 120px;
+    height: 50px;
+    border-radius: 30px;
+    margin: auto;
+    margin-bottom: 40px;
+    background-color: var(--cal-bg-color);
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 0 0 1px 2px var(--inset-shadow);
+}
+
+#color_mode_toggle{
+    /* box-shadow: inset 0 0 10px #ffffff; */
+    position: absolute;
+    width: 55px;
+    top: 5px;
+    bottom: 5px;
+    left: 60px;
+    border-radius: 30px;
+    outline: 1px #FF9500;
+    background-color: var(--operator-btn-bg-color);
+    transition: left 0.4s;
+}
+
+#light, #dark{
+    width: 50%;
+    height: 100%;
 }
 
 .screen{
@@ -43,7 +95,8 @@ body{
     background-color: var(--cal-bg-color);
     height: 110vh;
     width: 100vw;
-    color: white;
+    color: var(--screen-color);
+    /* color: white; */
     padding-top: 30px;
 }
 
@@ -80,29 +133,30 @@ body{
 }
 
 .calc-flex .operator{
-    background-color: var(--operatot-btn-bg-color);
+    background-color: var(--operator-btn-bg-color);
+    color: white;
     padding-bottom: 5px;
 }
 
 .func{
-    background-color: var(--main-bg-color);
-    color: var(--cal-bg-color);
+    background-color: var(--func-bg-color);
+    color: var(--func-color);
     font-size: 30px;
 }
 
 .num-click{
-    background-color: var(--main-bg-color);
+    background-color: var(--func-bg-color);
     transition: background-color 0ms;
 }
 
 .symbol-click{
-    background-color: white;
+    background-color: var(--symb-click-bg-color);
     transition: background-color 0ms;
 }
 
 .calc-flex .operator-click{
-    background-color: white;
-    color: var(--operatot-btn-bg-color);
+    background-color: var(--operator-click-bg-color);
+    color: var(--operator-btn-bg-color);
 }
 
 .clear-one{
@@ -112,18 +166,22 @@ body{
     padding: 3px;
 }
 
+/* COLOR MODE */
+
+
 @media only screen and (min-width: 426px){
     .calc{
         width: 375px;
         height: 667px;
         margin: 0 auto;
-        border-radius: 40px;
-        box-shadow: 0 0 20px 5px var(--btn-bg-color),
+        border-radius: 45px;
+        outline: 0.1px solid rgb(103, 102, 102);
+        box-shadow: 10px 10px 25px var(--box-shadow),
         inset 0 0 15px 2px var(--inset-shadow);
         
     }
 
     body{
-        padding-top: 70px;
+        padding-top: 40px;
     }
 }
